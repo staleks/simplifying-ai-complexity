@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
 @Slf4j
-public class WeatherForecastServiceImprovedImpl implements WeatherForecastService {
+public class AdvancedWeatherForecastService implements WeatherForecastService {
 
     @Value("${openWeatherMap.apiKey}")
     private String openWeatherMapApiKey;

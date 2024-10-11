@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: dev,basic,improved
+      on-profile: dev,basic,advanced
 
 logging:
   config: classpath:logback-spring.xml

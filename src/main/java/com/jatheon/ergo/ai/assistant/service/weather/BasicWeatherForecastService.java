@@ -6,7 +6,7 @@ import dev.langchain4j.agent.tool.Tool;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class WeatherForecastServiceImpl implements WeatherForecastService {
+public class BasicWeatherForecastService implements WeatherForecastService {
 
 
 
