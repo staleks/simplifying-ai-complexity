@@ -25,10 +25,8 @@ management:
     prometheus:
       enabled: true
 
-########## CHAT MODELS ##########
+########## IMAGE MODELS ##########
 
-aws:
-  bedrock:
-    accessKey: x
-    secretKey: x
-    region: us-east-1
+langchain4j:
+  dalle3:
+    api-key: x

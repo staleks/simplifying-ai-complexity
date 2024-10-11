@@ -1,11 +1,10 @@
-package com.jatheon.ergo.ai.assistant.model;
+package com.jatheon.ergo.ai.assistant.model.image;
 
 import lombok.Builder;
 import lombok.Getter;
 
-
+@Getter
 @Builder
-public class QuestionResponse {
-    @Getter
+public class ImageResponse {
     private final String answer;
 }
