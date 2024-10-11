@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: dev,basic,improved
 
 logging:
   config: classpath:logback-spring.xml
@@ -25,8 +25,23 @@ management:
     prometheus:
       enabled: true
 
-########## IMAGE MODELS ##########
+########## CHAT MODELS ##########
 
 langchain4j:
-  dalle3:
-    api-key: x
+  chat-model:
+    provider: openai
+    # OpenAI - openai
+    openai:
+      api-key: x
+      model-name: gpt-4o
+      temperature: 0.0
+      top-p: 1.0
+      max-tokens: 100
+      presence-penalty: 0.0
+      frequency-penalty: 0.0
+      max-retries: 3
+      log-requests: true
+      log-responses: true
+
+openWeatherMap:
+  apiKey: x

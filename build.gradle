@@ -49,6 +49,9 @@ dependencies {
 	implementation "dev.langchain4j:langchain4j:${langchain4jVersion}"
 	implementation "dev.langchain4j:langchain4j-open-ai:${langchain4jVersion}"
 
+	//~ OpenWeatherAPI
+	implementation "com.github.prominence:openweathermap-api:${prominenceOpenWeatherApiVersion}"
+
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
