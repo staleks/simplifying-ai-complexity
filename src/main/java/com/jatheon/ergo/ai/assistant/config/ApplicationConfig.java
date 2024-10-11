@@ -1,5 +1,6 @@
 package com.jatheon.ergo.ai.assistant.config;
 
+import com.jatheon.ergo.ai.assistant.config.langchain4j.Langchain4JConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Import;
 
 @Import({
         RestWebMvcConfig.class,
+        Langchain4JConfig.class
 })
 @Configuration
 public class ApplicationConfig {
