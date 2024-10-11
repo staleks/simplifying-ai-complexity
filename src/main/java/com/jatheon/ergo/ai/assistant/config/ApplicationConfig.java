@@ -4,7 +4,7 @@ import com.jatheon.ergo.ai.assistant.config.langchain4j.Langchain4JConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
-import com.jatheon.ergo.ai.assistant.service.OpenAIQuestionService;
+import com.jatheon.ergo.ai.assistant.service.BedrockAnthropicClaudeQuestionService;
 import com.jatheon.ergo.ai.assistant.service.QuestionService;
 import com.jatheon.ergo.ai.assistant.service.prompt.PromptFactory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -28,7 +28,7 @@ public class ApplicationConfig {
     //~ OpenAI Question
     @Bean
     QuestionService questionService(final ChatLanguageModel chatLanguageModel) {
-        return new OpenAIQuestionService(new PromptFactory(), chatLanguageModel);
+        return new BedrockAnthropicClaudeQuestionService(new PromptFactory(), chatLanguageModel);
     }
 
     @Bean

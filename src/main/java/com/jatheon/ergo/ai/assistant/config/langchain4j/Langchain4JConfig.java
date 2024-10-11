@@ -1,63 +1,60 @@
 package com.jatheon.ergo.ai.assistant.config.langchain4j;
 
+import dev.langchain4j.model.bedrock.BedrockAnthropicMessageChatModel;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
 
 import java.time.Duration;
 
 @Configuration
 public class Langchain4JConfig {
-    private static final long TIMEOUT_SECONDS = 120;
 
-    //~ OpenAI
-    @Value("${langchain4j.chat-model.openai.api-key}")
-    private String openAiApiKey;
+    //~ Credentials
+    @Value("${aws.bedrock.accessKey}")
+    private String accessKey;
 
-    @Value("${langchain4j.chat-model.openai.model-name}")
-    private String openAiModelName;
+    @Value("${aws.bedrock.secretKey}")
+    private String secretKey;
 
-    @Value("${langchain4j.chat-model.openai.temperature}")
-    private Double openAiTemperature;
+    @Value("${aws.bedrock.region}")
+    private String regionName;
 
-    @Value("${langchain4j.chat-model.openai.top-p}")
-    private Double openAiTopP;
 
-    @Value("${langchain4j.chat-model.openai.max-tokens}")
-    private Integer openAiMaxTokens;
+    //~ Creativity
+    @Value("${aws.bedrock.temp:0.5}")
+    private double temp;
 
-    @Value("${langchain4j.chat-model.openai.presence-penalty}")
-    private Double openAiPresencePenalty;
+    //~ Filter out cumulative probability is less than a specified threshold
+    @Value("${aws.bedrock.topP:0.3f}")
+    private float topP;
 
-    @Value("${langchain4j.chat-model.openai.frequency-penalty}")
-    private Double openAiFrequencyPenalty;
+    //~ Limits the model output to the top-k most probable tokens
+    @Value("${aws.bedrock.topK:50}")
+    private int topK;
 
-    @Value("${langchain4j.chat-model.openai.max-retries}")
-    private Integer openAiMaxRetries;
+    @Value("${aws.bedrock.maxRetries:1}")
+    private int maxRetries;
 
-    @Value("${langchain4j.chat-model.openai.log-requests}")
-    private boolean openAiLogRequests;
-
-    @Value("${langchain4j.chat-model.openai.log-responses}")
-    private boolean openAiLogResponses;
-
+    private AwsCredentialsProvider credentialsProvider() {
+        return StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey));
+    }
 
     @Bean
     public ChatLanguageModel chatLanguageModel() {
-        return OpenAiChatModel.builder()
-                .apiKey(openAiApiKey)
-                .modelName(openAiModelName)
-                .temperature(openAiTemperature)
-                .topP(openAiTopP)
-                .maxTokens(openAiMaxTokens)
-                .presencePenalty(openAiPresencePenalty)
-                .frequencyPenalty(openAiFrequencyPenalty)
-                .timeout(Duration.ofSeconds(TIMEOUT_SECONDS))
-                .maxRetries(openAiMaxRetries)
-                .logRequests(openAiLogRequests)
-                .logResponses(openAiLogResponses)
+        return BedrockAnthropicMessageChatModel.builder()
+                .region(Region.of(regionName))
+                .model(BedrockAnthropicMessageChatModel.Types.AnthropicClaudeV2.getValue())
+                .temperature(temp)
+                .topP(topP)
+                .topK(topK)
+                .maxRetries(maxRetries)
+                .credentialsProvider(credentialsProvider())
                 .build();
     }
 

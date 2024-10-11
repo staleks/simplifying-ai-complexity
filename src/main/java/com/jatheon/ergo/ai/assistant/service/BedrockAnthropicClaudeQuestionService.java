@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class OpenAIQuestionService implements QuestionService {
+public class BedrockAnthropicClaudeQuestionService implements QuestionService {
 
     private final PromptFactory promptFactory;
     private final ChatLanguageModel chatLanguageModel;
