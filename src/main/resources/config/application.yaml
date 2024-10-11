@@ -25,3 +25,22 @@ management:
     prometheus:
       enabled: true
 
+########## CHAT MODELS ##########
+
+langchain4j:
+  chat-model:
+    provider: openai
+    # OpenAI - openai
+    openai:
+      api-key: x
+      # Chat model settings
+      model: gpt-3.5-turbo
+      model-name: gpt-3.5-turbo
+      temperature: 0.0
+      top-p: 1.0
+      max-tokens: 100
+      presence-penalty: 0.0
+      frequency-penalty: 0.0
+      max-retries: 3
+      log-requests: true
+      log-responses: true

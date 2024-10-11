@@ -45,6 +45,11 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
+	//~ dev.langchain4j
+	implementation "dev.langchain4j:langchain4j:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-open-ai:${langchain4jVersion}"
+
+
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
