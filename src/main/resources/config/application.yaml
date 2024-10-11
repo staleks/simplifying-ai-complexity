@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  config: classpath:logback-spring.xml
+
+server:
+  port: 8090
+  undertow:
+    accesslog:
+      enabled: false
+
+management:
+  endpoints:
+    web.exposure.include: info, health, prometheus
+    enabled-by-default: false
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    prometheus:
+      enabled: true
+
