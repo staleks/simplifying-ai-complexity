@@ -1,6 +1,9 @@
 package com.jatheon.ergo.ai.assistant.config;
 
 import com.jatheon.ergo.ai.assistant.config.langchain4j.Langchain4JConfig;
+import com.jatheon.ergo.ai.assistant.config.queue.SQSConfig;
+import com.jatheon.ergo.ai.assistant.config.scheduling.SchedulerConfig;
+import com.jatheon.ergo.ai.assistant.config.storage.S3ClientConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
 import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
@@ -31,7 +34,10 @@ import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Import({
         RestWebMvcConfig.class,
-        Langchain4JConfig.class
+        Langchain4JConfig.class,
+        S3ClientConfig.class,
+        SchedulerConfig.class,
+        SQSConfig.class
 })
 @Configuration
 public class ApplicationConfig {
