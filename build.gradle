@@ -39,6 +39,8 @@ dependencies {
 
 	//~ Apache Commons
 	implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
+	implementation "commons-codec:commons-codec:${commonsCodecsVersion}"
+
 
 	//~ JSON
 	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
@@ -47,10 +49,20 @@ dependencies {
 
 	//~ dev.langchain4j
 	implementation "dev.langchain4j:langchain4j:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-document-loader-amazon-s3:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-document-parser-apache-tika:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-document-parser-apache-pdfbox:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-document-parser-apache-poi:${langchain4jVersion}"
 	implementation "dev.langchain4j:langchain4j-open-ai:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-embeddings:${langchain4jVersion}"
+	implementation "dev.langchain4j:langchain4j-elasticsearch:${langchain4jVersion}"
 
-	//~ OpenWeatherAPI
-	implementation "com.github.prominence:openweathermap-api:${prominenceOpenWeatherApiVersion}"
+	//~ AWS
+	implementation "software.amazon.awssdk:s3:${awsSdkVersion}"
+	implementation "software.amazon.awssdk:s3-event-notifications:${awsSdkVersion}"
+	implementation "software.amazon.awssdk:sqs:${awsSdkVersion}"
+	implementation "software.amazon.awssdk:url-connection-client:${awsSdkVersion}"
+
 
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

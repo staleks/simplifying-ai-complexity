@@ -2,18 +2,32 @@ package com.jatheon.ergo.ai.assistant.config;
 
 import com.jatheon.ergo.ai.assistant.config.langchain4j.Langchain4JConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
+import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
+import com.jatheon.ergo.ai.assistant.endpoint.file.FileUploadController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
-import com.jatheon.ergo.ai.assistant.service.OpenAIQuestionService;
-import com.jatheon.ergo.ai.assistant.service.QuestionService;
-import com.jatheon.ergo.ai.assistant.service.weather.WeatherForecastService;
-import com.jatheon.ergo.ai.assistant.service.weather.BasicWeatherForecastService;
-import com.jatheon.ergo.ai.assistant.service.weather.AdvancedWeatherForecastService;
+import com.jatheon.ergo.ai.assistant.service.EnrichedOpenAIQuestionService;
+import com.jatheon.ergo.ai.assistant.service.EnrichedQuestionService;
+import com.jatheon.ergo.ai.assistant.service.IngestionOrchestrator;
+import com.jatheon.ergo.ai.assistant.service.SimpleOpenAIQuestionService;
+import com.jatheon.ergo.ai.assistant.service.SimpleQuestionService;
+import com.jatheon.ergo.ai.assistant.service.file.S3StorageService;
+import com.jatheon.ergo.ai.assistant.service.file.StorageService;
+import com.jatheon.ergo.ai.assistant.service.file.parser.CustomDocumentParserFactory;
+import com.jatheon.ergo.ai.assistant.service.file.parser.DocumentParserFactory;
+import com.jatheon.ergo.ai.assistant.service.queue.MessageEventGateway;
+import com.jatheon.ergo.ai.assistant.service.queue.SQSMessageEventGateway;
+import dev.langchain4j.data.document.loader.amazon.s3.AmazonS3DocumentLoader;
+import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Import({
         RestWebMvcConfig.class,
@@ -28,28 +42,70 @@ public class ApplicationConfig {
         return new PingController();
     }
 
+    //~ File upload
     @Bean
-    @Profile("basic")
-    WeatherForecastService weatherForecastService() {
-        return new BasicWeatherForecastService();
+    StorageService uploadStorageService(final S3Client s3Client,
+                                        final DocumentParserFactory documentParserFactory,
+                                        final AmazonS3DocumentLoader amazonS3DocumentLoader) {
+        return new S3StorageService(s3Client, documentParserFactory, amazonS3DocumentLoader);
     }
 
     @Bean
-    @Profile("advanced")
-    WeatherForecastService weatherForecastServiceAdvanced() {
-        return new AdvancedWeatherForecastService();
+    FileUploadController fileUploadController(final StorageService uploadStorageService) {
+        return new FileUploadController(uploadStorageService);
+    }
+
+    //~ Handle S3 event
+    @Bean
+    MessageEventGateway messageEventGateway(final SqsClient sqsConsumerClient) {
+        return new SQSMessageEventGateway(sqsConsumerClient);
+    }
+
+    //~ Ingestion
+    @Bean
+    IngestionOrchestrator ingestionOrchestrator(final MessageEventGateway messageEventGateway,
+                                                final StorageService storageService,
+                                                final EmbeddingStoreIngestor embeddingStoreIngestor) {
+        return new IngestionOrchestrator(messageEventGateway, storageService, embeddingStoreIngestor);
+    }
+
+    //~ Document parsing
+    @Bean
+    DocumentParserFactory documentParser() {
+        return new CustomDocumentParserFactory();
     }
 
     @Bean
-    QuestionService questionService(final ChatLanguageModel chatLanguageModel,
-                                    final WeatherForecastService weatherForecastService) {
-        return new OpenAIQuestionService(chatLanguageModel, weatherForecastService);
+    AmazonS3DocumentLoader documentLoader(final S3Client s3Client) {
+        return new AmazonS3DocumentLoader(s3Client);
+    }
+
+
+    //~ Simple Answer
+    @Bean
+    SimpleQuestionService simpleQuestionService(final EmbeddingModel embeddingModel,
+                                                final EmbeddingStore<TextSegment> embeddingStore,
+                                                final ChatLanguageModel chatLanguageModel) {
+        return new SimpleOpenAIQuestionService(embeddingModel, embeddingStore, chatLanguageModel);
     }
 
     @Bean
-    QuestionController questionController(final QuestionService questionService) {
+    QuestionController questionController(final SimpleQuestionService questionService) {
         return new QuestionController(questionService);
     }
 
+    //~ Enriched Answer
+    @Bean
+    EnrichedQuestionService questionService(final EmbeddingModel embeddingModel,
+                                            final EmbeddingStore<TextSegment> embeddingStore,
+                                            final ChatLanguageModel chatLanguageModel) {
+        return new EnrichedOpenAIQuestionService(embeddingModel, embeddingStore, chatLanguageModel);
+    }
+
+
+    @Bean
+    EnrichedQuestionController advancedQuestionController(final EnrichedQuestionService questionService) {
+        return new EnrichedQuestionController(questionService);
+    }
 
 }

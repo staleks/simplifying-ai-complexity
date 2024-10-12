@@ -1,8 +1,12 @@
 spring:
   config:
     activate:
-      on-profile: dev,basic,advanced
+      on-profile: dev
 
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 logging:
   config: classpath:logback-spring.xml
 
@@ -25,6 +29,7 @@ management:
     prometheus:
       enabled: true
 
+
 ########## CHAT MODELS ##########
 
 langchain4j:
@@ -42,6 +47,51 @@ langchain4j:
       max-retries: 3
       log-requests: true
       log-responses: true
+  dalle3:
+    api-key: x
 
-openWeatherMap:
-  apiKey: x
+
+##### AWS S3 & SQS #####
+aws:
+  s3:
+    accessKey: x
+    secretKey: x
+    region: us-east-1
+    endpoint: https://s3.us-east-1.amazonaws.com
+    bucketName: simplify-ai-complexity
+  sqs:
+    accessKey: x
+    secretKey: x
+    region: us-east-1
+    consumer:
+      endpoint: https://sqs.us-east-1.amazonaws.com/592036762652/simplify_ai_complexity
+      maxNumberOfMessagesToReceive: 10
+      waitTimeSeconds: 20
+
+
+##### Processing #####
+processing:
+  message:
+    fetch:
+      rate: 50
+
+##### Vector Store ES #####
+elasticsearch:
+  host: localhost
+  port: 9200
+  username: elastic
+  password: password
+
+vectorstore:
+  index:
+    name: embeddings
+  dimension:
+    size: 1536
+
+##### Document Assistant #####
+documentAssistant:
+  inference:
+    maxResults: 20
+    minScore: 0.7
+
+
