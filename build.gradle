@@ -23,6 +23,13 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom "dev.langchain4j:langchain4j-bom:${langchain4jVersion}"
+		mavenBom "software.amazon.awssdk:bom:${awsSdkVersion}"
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -48,20 +55,20 @@ dependencies {
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
 	//~ dev.langchain4j
-	implementation "dev.langchain4j:langchain4j:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-document-loader-amazon-s3:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-document-parser-apache-tika:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-document-parser-apache-pdfbox:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-document-parser-apache-poi:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-open-ai:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-embeddings:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-elasticsearch:${langchain4jVersion}"
+	implementation 'dev.langchain4j:langchain4j'
+	implementation 'dev.langchain4j:langchain4j-document-loader-amazon-s3'
+	implementation 'dev.langchain4j:langchain4j-document-parser-apache-tika'
+	implementation 'dev.langchain4j:langchain4j-document-parser-apache-pdfbox'
+	implementation 'dev.langchain4j:langchain4j-document-parser-apache-poi'
+	implementation 'dev.langchain4j:langchain4j-open-ai'
+	implementation 'dev.langchain4j:langchain4j-embeddings'
+	implementation 'dev.langchain4j:langchain4j-elasticsearch'
 
 	//~ AWS
-	implementation "software.amazon.awssdk:s3:${awsSdkVersion}"
-	implementation "software.amazon.awssdk:s3-event-notifications:${awsSdkVersion}"
-	implementation "software.amazon.awssdk:sqs:${awsSdkVersion}"
-	implementation "software.amazon.awssdk:url-connection-client:${awsSdkVersion}"
+	implementation 'software.amazon.awssdk:s3'
+	implementation 'software.amazon.awssdk:s3-event-notifications'
+	implementation 'software.amazon.awssdk:sqs'
+	implementation 'software.amazon.awssdk:url-connection-client'
 
 
 	//~ testing
