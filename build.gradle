@@ -23,6 +23,12 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom "dev.langchain4j:langchain4j-bom:${langchain4jVersion}"
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -46,8 +52,8 @@ dependencies {
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
 	//~ dev.langchain4j
-	implementation "dev.langchain4j:langchain4j:${langchain4jVersion}"
-	implementation "dev.langchain4j:langchain4j-bedrock:${langchain4jVersion}"
+	implementation 'dev.langchain4j:langchain4j'
+	implementation 'dev.langchain4j:langchain4j-bedrock'
 
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
