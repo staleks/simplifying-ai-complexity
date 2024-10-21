@@ -3,6 +3,14 @@ spring:
     activate:
       on-profile: dev
 
+  docker:
+    compose:
+      file: docker/docker-compose.yaml
+      lifecycle-management: start-and-stop
+      stop:
+        command: down
+        timeout: 1m
+
   servlet:
     multipart:
       max-file-size: 100MB
@@ -91,5 +99,3 @@ documentAssistant:
   inference:
     maxResults: 20
     minScore: 0.7
-
-
