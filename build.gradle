@@ -33,6 +33,7 @@ dependencyManagement {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	//~ undertow servlet
@@ -50,6 +51,7 @@ dependencies {
 
 
 	//~ JSON
+	implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
 	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
@@ -79,4 +81,11 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+bootRun {
+	args = ["--spring.profiles.active=dev"]
+	jvmArgs = [
+			"-Duser.language=en",
+			"-Duser.region=US"
+	]
+}
 
