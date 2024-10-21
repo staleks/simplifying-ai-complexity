@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: simplify-ai-complexity
+
   config:
     activate:
       on-profile: dev
