@@ -1,64 +1,28 @@
 package com.jatheon.ergo.ai.assistant.config.langchain4j;
 
+import com.jatheon.ergo.ai.assistant.model.ChatLanguageModelType;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import java.time.Duration;
+import java.util.HashMap;
 
+@Import({
+        GPT35TChatLanguageModelConfig.class,
+        BedrockAnothropicClaudeV2LanguageModelConfig.class
+})
 @Configuration
 public class Langchain4JConfig {
-    private static final long TIMEOUT_SECONDS = 120;
-
-    //~ OpenAI
-    @Value("${langchain4j.chat-model.openai.api-key}")
-    private String openAiApiKey;
-
-    @Value("${langchain4j.chat-model.openai.model-name}")
-    private String openAiModelName;
-
-    @Value("${langchain4j.chat-model.openai.temperature}")
-    private Double openAiTemperature;
-
-    @Value("${langchain4j.chat-model.openai.top-p}")
-    private Double openAiTopP;
-
-    @Value("${langchain4j.chat-model.openai.max-tokens}")
-    private Integer openAiMaxTokens;
-
-    @Value("${langchain4j.chat-model.openai.presence-penalty}")
-    private Double openAiPresencePenalty;
-
-    @Value("${langchain4j.chat-model.openai.frequency-penalty}")
-    private Double openAiFrequencyPenalty;
-
-    @Value("${langchain4j.chat-model.openai.max-retries}")
-    private Integer openAiMaxRetries;
-
-    @Value("${langchain4j.chat-model.openai.log-requests}")
-    private boolean openAiLogRequests;
-
-    @Value("${langchain4j.chat-model.openai.log-responses}")
-    private boolean openAiLogResponses;
-
 
     @Bean
-    public ChatLanguageModel chatLanguageModel() {
-        return OpenAiChatModel.builder()
-                .apiKey(openAiApiKey)
-                .modelName(openAiModelName)
-                .temperature(openAiTemperature)
-                .topP(openAiTopP)
-                .maxTokens(openAiMaxTokens)
-                .presencePenalty(openAiPresencePenalty)
-                .frequencyPenalty(openAiFrequencyPenalty)
-                .timeout(Duration.ofSeconds(TIMEOUT_SECONDS))
-                .maxRetries(openAiMaxRetries)
-                .logRequests(openAiLogRequests)
-                .logResponses(openAiLogResponses)
-                .build();
+    HashMap<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels(@Qualifier("gpt35TChatLanguageModel") final ChatLanguageModel gpt35TChatLanguageModel,
+                                                                         @Qualifier("bedrockAnthropicClaude2ChatLanguageModel") final ChatLanguageModel bedrockAnthropicClaude2ChatLanguageModel) {
+        HashMap<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels = new HashMap<>();
+        chatLanguageModels.put(ChatLanguageModelType.GPT_3_5_TURBO, gpt35TChatLanguageModel);
+        chatLanguageModels.put(ChatLanguageModelType.CLAUDE, bedrockAnthropicClaude2ChatLanguageModel);
+        return chatLanguageModels;
     }
 
 }

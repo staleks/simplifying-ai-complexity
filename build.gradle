@@ -54,6 +54,7 @@ dependencies {
 	//~ dev.langchain4j
 	implementation 'dev.langchain4j:langchain4j'
 	implementation 'dev.langchain4j:langchain4j-open-ai'
+	implementation 'dev.langchain4j:langchain4j-bedrock'
 
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

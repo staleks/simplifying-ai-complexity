@@ -1,5 +1,6 @@
 package com.jatheon.ergo.ai.assistant.endpoint;
 
+import com.jatheon.ergo.ai.assistant.model.ChatLanguageModelType;
 import com.jatheon.ergo.ai.assistant.model.QuestionRequest;
 import com.jatheon.ergo.ai.assistant.model.QuestionResponse;
 import com.jatheon.ergo.ai.assistant.service.QuestionService;
@@ -28,7 +29,7 @@ public class QuestionController {
     public ResponseEntity<QuestionResponse> question(@RequestBody QuestionRequest request) {
         if (StringUtils.isNotBlank(request.getQuestion())) {
             try {
-                return ResponseEntity.ok(questionService.performSearch(request.getQuestion()));
+                return ResponseEntity.ok(questionService.performSearch(ChatLanguageModelType.GPT_3_5_TURBO, request.getQuestion()));
             } catch (QuestionServiceException qse) {
                 return ResponseEntity.internalServerError().build();
             }

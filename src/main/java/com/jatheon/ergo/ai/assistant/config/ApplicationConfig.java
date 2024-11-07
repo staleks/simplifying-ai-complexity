@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.util.HashMap;
+
 @Import({
         RestWebMvcConfig.class,
         Langchain4JConfig.class
@@ -27,8 +29,8 @@ public class ApplicationConfig {
 
     //~ OpenAI Question
     @Bean
-    QuestionService questionService(final ChatLanguageModel chatLanguageModel) {
-        return new OpenAIQuestionService(new PromptFactory(), chatLanguageModel);
+    QuestionService questionService(final HashMap<String, ChatLanguageModel> chatLanguageModels) {
+        return new OpenAIQuestionService(new PromptFactory(), chatLanguageModels);
     }
 
     @Bean
