@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -26,10 +27,12 @@ public class QuestionController {
     @PostMapping(value = QUESTION_ENDPOINT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionResponse> question(@RequestBody QuestionRequest request) {
+    public ResponseEntity<QuestionResponse> question(
+            @RequestHeader(name = "X-Chat-Language-Model", defaultValue = "OPEN_AI") String chatLanguageModel,
+            @RequestBody QuestionRequest request) {
         if (StringUtils.isNotBlank(request.getQuestion())) {
             try {
-                return ResponseEntity.ok(questionService.performSearch(ChatLanguageModelType.GPT_3_5_TURBO, request.getQuestion()));
+                return ResponseEntity.ok(questionService.performSearch(ChatLanguageModelType.fromModelName(chatLanguageModel), request.getQuestion()));
             } catch (QuestionServiceException qse) {
                 return ResponseEntity.internalServerError().build();
             }

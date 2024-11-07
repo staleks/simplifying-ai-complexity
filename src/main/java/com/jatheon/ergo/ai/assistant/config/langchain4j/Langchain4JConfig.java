@@ -8,19 +8,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Import({
-        GPT35TChatLanguageModelConfig.class,
+        OpenAIChatLanguageModelConfig.class,
         BedrockAnothropicClaudeV2LanguageModelConfig.class
 })
 @Configuration
 public class Langchain4JConfig {
 
     @Bean
-    HashMap<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels(@Qualifier("gpt35TChatLanguageModel") final ChatLanguageModel gpt35TChatLanguageModel,
-                                                                         @Qualifier("bedrockAnthropicClaude2ChatLanguageModel") final ChatLanguageModel bedrockAnthropicClaude2ChatLanguageModel) {
-        HashMap<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels = new HashMap<>();
-        chatLanguageModels.put(ChatLanguageModelType.GPT_3_5_TURBO, gpt35TChatLanguageModel);
+    Map<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels(@Qualifier("openAiChatLanguageModel") final ChatLanguageModel openAiChatLanguageModel,
+                                                                     @Qualifier("bedrockAnthropicClaude2ChatLanguageModel") final ChatLanguageModel bedrockAnthropicClaude2ChatLanguageModel) {
+        Map<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels = new HashMap<>();
+        chatLanguageModels.put(ChatLanguageModelType.OPEN_AI, openAiChatLanguageModel);
         chatLanguageModels.put(ChatLanguageModelType.CLAUDE, bedrockAnthropicClaude2ChatLanguageModel);
         return chatLanguageModels;
     }

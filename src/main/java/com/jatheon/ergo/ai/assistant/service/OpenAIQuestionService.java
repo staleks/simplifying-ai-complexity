@@ -9,26 +9,33 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 public class OpenAIQuestionService implements QuestionService {
 
     private final PromptFactory promptFactory;
-    private final HashMap<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels;
+    private final Map<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels;
 
     @Override
     public QuestionResponse performSearch(final ChatLanguageModelType model,
                                           final String question) throws QuestionServiceException {
+        String finalAnswer = StringUtils.EMPTY;
         var prompt = promptFactory.createPrompt(question);
-
         ChatLanguageModel chatLanguageModel = chatLanguageModels.get(model);
-        Response<AiMessage> answer = chatLanguageModel.generate(prompt.toUserMessage());
-
+        if (chatLanguageModel != null) {
+            Response<AiMessage> answer = chatLanguageModel.generate(prompt.toUserMessage());
+            if (answer != null) {
+                finalAnswer = answer.content().text();
+            } else {
+                throw new QuestionServiceException("Failed to get answer from LLM");
+            }
+        }
         return QuestionResponse.builder()
-                .answer(answer.content().text())
+                .answer(finalAnswer)
                 .build();
     }
 

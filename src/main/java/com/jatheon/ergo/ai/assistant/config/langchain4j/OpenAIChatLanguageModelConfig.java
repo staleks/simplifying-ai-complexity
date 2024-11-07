@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 
 @Configuration
-public class GPT35TChatLanguageModelConfig {
+public class OpenAIChatLanguageModelConfig {
 
     private static final long TIMEOUT_SECONDS = 120;
 
@@ -44,8 +44,8 @@ public class GPT35TChatLanguageModelConfig {
     @Value("${langchain4j.chat-model.openai.log-responses}")
     private boolean openAiLogResponses;
 
-    @Bean(name = "gpt35TChatLanguageModel")
-    public ChatLanguageModel gpt35TChatLanguageModel() {
+    @Bean(name = "openAiChatLanguageModel")
+    public ChatLanguageModel openAiChatLanguageModel() {
         return OpenAiChatModel.builder()
                 .apiKey(openAiApiKey)
                 .modelName(openAiModelName)

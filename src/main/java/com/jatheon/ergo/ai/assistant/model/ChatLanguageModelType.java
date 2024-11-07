@@ -2,9 +2,8 @@ package com.jatheon.ergo.ai.assistant.model;
 
 public enum ChatLanguageModelType {
 
-    GPT_3_5_TURBO("gpt-3.5-turbo"),
-    GPT_4O("gpt-4o"),
-    CLAUDE("claude");
+    OPEN_AI("OPEN_AI"),
+    CLAUDE("CLAUDE");
 
     private final String modelName;
 
@@ -15,4 +14,14 @@ public enum ChatLanguageModelType {
     public String getModelName() {
         return modelName;
     }
+
+    public static ChatLanguageModelType fromModelName(final String modelName) {
+        for (ChatLanguageModelType type : ChatLanguageModelType.values()) {
+            if (type.getModelName().equalsIgnoreCase(modelName)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown model name: " + modelName);
+    }
+
 }
