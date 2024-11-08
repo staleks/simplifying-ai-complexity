@@ -7,6 +7,7 @@ import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
 import com.jatheon.ergo.ai.assistant.model.ChatLanguageModelType;
 import com.jatheon.ergo.ai.assistant.service.masterchef.MasterChefService;
 import com.jatheon.ergo.ai.assistant.service.masterchef.MasterChefServiceImpl;
+import com.jatheon.ergo.ai.assistant.service.prompt.PromptFactory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,7 @@ public class ApplicationConfig {
 
     @Bean
     MasterChefService masterChefService(final Map<ChatLanguageModelType, ChatLanguageModel> chatLanguageModels) {
-        return new MasterChefServiceImpl(chatLanguageModels);
+        return new MasterChefServiceImpl(new PromptFactory(), chatLanguageModels);
     }
 
     @Bean

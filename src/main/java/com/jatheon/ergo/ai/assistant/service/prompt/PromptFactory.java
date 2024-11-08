@@ -8,12 +8,8 @@ import java.util.Map;
 
 public class PromptFactory {
 
-    private final String SIMPLE_PROMPT_TEMPLATE = "Answer the following question to the best of your ability:\n"
-            + "\n"
-            + "Question:\n"
-            + "{{question}}\n";
-
-    private final String POLITE_PROMPT_TEMPLATE = "Answer the following question to the best of your ability:\n"
+    private final String POLITE_PROMPT_TEMPLATE = "You are a professional chef. You are friendly, polite and concise. "
+            + "Answer the following question to the best of your ability:\n"
             + "\n"
             + "Question:\n"
             + "{{question}}\n"
@@ -27,8 +23,7 @@ public class PromptFactory {
      * @return
      */
     public Prompt createPrompt(final String question) {
-        PromptTemplate promptTemplate = PromptTemplate.from(SIMPLE_PROMPT_TEMPLATE);
-        //~ PromptTemplate promptTemplate = PromptTemplate.from(POLITE_PROMPT_TEMPLATE);
+        PromptTemplate promptTemplate = PromptTemplate.from(POLITE_PROMPT_TEMPLATE);
         Map<String, Object> variables = new HashMap<>();
         variables.put("question", question);
         return promptTemplate.apply(variables);
