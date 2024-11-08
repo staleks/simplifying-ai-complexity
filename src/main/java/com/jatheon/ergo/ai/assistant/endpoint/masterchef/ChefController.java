@@ -34,7 +34,7 @@ public class ChefController {
     public ResponseEntity<QuestionResponse> chefQuestion(
             @RequestHeader(name = "X-Chat-Language-Model", defaultValue = "OPEN_AI") String chatLanguageModel,
             @RequestBody ChefQuestion request) {
-        return ResponseEntity.ok(QuestionResponse.builder().answer("Chef is cooking").build());
+        return ResponseEntity.ok(QuestionResponse.builder().answer(masterChefService.explain(request.getQuestion()).getAnswer()).build());
     }
 
 
