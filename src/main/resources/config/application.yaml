@@ -49,7 +49,7 @@ langchain4j:
     provider: openai
     # OpenAI - openai
     openai:
-      api-key: x
+      api-key: ${OPENAI_API_KEY}
       model-name: gpt-4o
       temperature: 0.0
       top-p: 1.0
