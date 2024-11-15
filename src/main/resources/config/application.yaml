@@ -29,4 +29,4 @@ management:
 
 langchain4j:
   dalle3:
-    api-key: x
+    api-key: ${OPENAI_API_KEY}
