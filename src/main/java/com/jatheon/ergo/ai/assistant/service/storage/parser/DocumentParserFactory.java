@@ -1,4 +1,4 @@
-package com.jatheon.ergo.ai.assistant.service.file.parser;
+package com.jatheon.ergo.ai.assistant.service.storage.parser;
 
 import dev.langchain4j.data.document.DocumentParser;
 

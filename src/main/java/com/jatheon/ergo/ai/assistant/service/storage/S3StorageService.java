@@ -1,7 +1,8 @@
-package com.jatheon.ergo.ai.assistant.service.file;
+package com.jatheon.ergo.ai.assistant.service.storage;
 
-import com.jatheon.ergo.ai.assistant.model.file.DocumentMetadata;
-import com.jatheon.ergo.ai.assistant.service.file.parser.DocumentParserFactory;
+import com.jatheon.ergo.ai.assistant.model.storage.DocumentMetadata;
+import com.jatheon.ergo.ai.assistant.model.storage.StorageFile;
+import com.jatheon.ergo.ai.assistant.service.storage.parser.DocumentParserFactory;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.data.document.loader.amazon.s3.AmazonS3DocumentLoader;
@@ -13,10 +14,13 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -87,6 +91,20 @@ public class S3StorageService implements StorageService {
             throw new IllegalArgumentException("Unable to read message content from storage.", exception);
         }
     }
+
+    @Override
+    public List<StorageFile> fetchAll() {
+        List<StorageFile> result = new ArrayList<>();
+        ListObjectsV2Request  listObjectsV2Request = ListObjectsV2Request.builder()
+                .bucket(bucketName)
+                .build();
+        s3Client.listObjectsV2(listObjectsV2Request).contents().forEach(s3Object -> {
+            result.add(StorageFile.of(bucketName, s3Object.key(), s3Object.lastModified(), s3Object.size(), s3Object.eTag()));
+        });
+        return result;
+    }
+
+
 
 
 }

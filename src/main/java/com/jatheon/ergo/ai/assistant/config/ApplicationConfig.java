@@ -7,17 +7,17 @@ import com.jatheon.ergo.ai.assistant.config.storage.S3ClientConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
 import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
-import com.jatheon.ergo.ai.assistant.endpoint.file.FileUploadController;
+import com.jatheon.ergo.ai.assistant.endpoint.storage.FileController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
 import com.jatheon.ergo.ai.assistant.service.EnrichedOpenAIQuestionService;
 import com.jatheon.ergo.ai.assistant.service.EnrichedQuestionService;
 import com.jatheon.ergo.ai.assistant.service.IngestionOrchestrator;
 import com.jatheon.ergo.ai.assistant.service.SimpleOpenAIQuestionService;
 import com.jatheon.ergo.ai.assistant.service.SimpleQuestionService;
-import com.jatheon.ergo.ai.assistant.service.file.S3StorageService;
-import com.jatheon.ergo.ai.assistant.service.file.StorageService;
-import com.jatheon.ergo.ai.assistant.service.file.parser.CustomDocumentParserFactory;
-import com.jatheon.ergo.ai.assistant.service.file.parser.DocumentParserFactory;
+import com.jatheon.ergo.ai.assistant.service.storage.S3StorageService;
+import com.jatheon.ergo.ai.assistant.service.storage.StorageService;
+import com.jatheon.ergo.ai.assistant.service.storage.parser.CustomDocumentParserFactory;
+import com.jatheon.ergo.ai.assistant.service.storage.parser.DocumentParserFactory;
 import com.jatheon.ergo.ai.assistant.service.queue.MessageEventGateway;
 import com.jatheon.ergo.ai.assistant.service.queue.SQSMessageEventGateway;
 import dev.langchain4j.data.document.loader.amazon.s3.AmazonS3DocumentLoader;
@@ -57,8 +57,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    FileUploadController fileUploadController(final StorageService uploadStorageService) {
-        return new FileUploadController(uploadStorageService);
+    FileController fileUploadController(final StorageService uploadStorageService) {
+        return new FileController(uploadStorageService);
     }
 
     //~ Handle S3 event

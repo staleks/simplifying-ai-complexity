@@ -1,7 +1,7 @@
 package com.jatheon.ergo.ai.assistant.service;
 
 import com.jatheon.ergo.ai.assistant.model.queue.DocumentUploadEvent;
-import com.jatheon.ergo.ai.assistant.service.file.StorageService;
+import com.jatheon.ergo.ai.assistant.service.storage.StorageService;
 import com.jatheon.ergo.ai.assistant.service.queue.MessageEventGateway;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;

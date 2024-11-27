@@ -1,4 +1,4 @@
-package com.jatheon.ergo.ai.assistant.model.file;
+package com.jatheon.ergo.ai.assistant.model.storage;
 
 import lombok.Value;
 
