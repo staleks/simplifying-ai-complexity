@@ -9,6 +9,7 @@ import dev.langchain4j.data.document.loader.amazon.s3.AmazonS3DocumentLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -83,7 +84,7 @@ public class S3StorageService implements StorageService {
             return document;
         } catch(final S3Exception s3Exception) {
             final String message = format("Unable to read message content from AWS storage [bucket: %s, key: %s]", bucketName, location);
-            if (s3Exception.statusCode() == 404) {
+            if (s3Exception.statusCode() == HttpStatus.NOT_FOUND.value()) {
                 throw new IllegalStateException("Content with specified key does not exist.", s3Exception);
             }
             throw new IllegalArgumentException(s3Exception);
