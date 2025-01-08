@@ -9,6 +9,7 @@ import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.storage.FileController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
+import com.jatheon.ergo.ai.assistant.repository.VectorStoreRepository;
 import com.jatheon.ergo.ai.assistant.service.EnrichedOpenAIQuestionService;
 import com.jatheon.ergo.ai.assistant.service.EnrichedQuestionService;
 import com.jatheon.ergo.ai.assistant.service.IngestionOrchestrator;
@@ -104,8 +105,9 @@ public class ApplicationConfig {
     @Bean
     EnrichedQuestionService questionService(final EmbeddingModel embeddingModel,
                                             final EmbeddingStore<TextSegment> embeddingStore,
-                                            final ChatLanguageModel chatLanguageModel) {
-        return new EnrichedOpenAIQuestionService(embeddingModel, embeddingStore, chatLanguageModel);
+                                            final ChatLanguageModel chatLanguageModel,
+                                            final VectorStoreRepository vectorStoreRepository) {
+        return new EnrichedOpenAIQuestionService(embeddingModel, embeddingStore, chatLanguageModel, vectorStoreRepository);
     }
 
 

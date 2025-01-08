@@ -2,6 +2,7 @@ package com.jatheon.ergo.ai.assistant.service;
 
 import com.jatheon.ergo.ai.assistant.model.inference.EnrichedQuestionResponse;
 import com.jatheon.ergo.ai.assistant.model.inference.RecommendationItem;
+import com.jatheon.ergo.ai.assistant.repository.VectorStoreRepository;
 import com.jatheon.ergo.ai.assistant.service.error.QuestionServiceException;
 import com.jatheon.ergo.ai.assistant.service.prompt.PromptFactory;
 import dev.langchain4j.data.embedding.Embedding;
@@ -34,8 +35,21 @@ public class EnrichedOpenAIQuestionService implements EnrichedQuestionService {
     private final EmbeddingStore<TextSegment> embeddingStore;
     private final ChatLanguageModel chatLanguageModel;
 
+    private final VectorStoreRepository vectorStoreRepository;
+
+    /**
+     * TODO: staleks - have to work on this `vectorStoreRepository` for generating Summary.
+     *
+     * @param question
+     * @return
+     * @throws QuestionServiceException
+     */
     @Override
-    public EnrichedQuestionResponse performAdvancedSearch(String question) throws QuestionServiceException {
+    public EnrichedQuestionResponse performAdvancedSearch(final String question) throws QuestionServiceException {
+        /**
+        vectorStoreRepository.search();
+         **/
+
         // Embed the question
         Response<Embedding> queryEmbedding = embeddingModel.embed(question);
 

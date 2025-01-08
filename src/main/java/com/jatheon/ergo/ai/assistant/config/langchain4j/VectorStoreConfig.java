@@ -1,9 +1,16 @@
 package com.jatheon.ergo.ai.assistant.config.langchain4j;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.jatheon.ergo.ai.assistant.repository.VectorStoreRepository;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +44,21 @@ public class VectorStoreConfig {
                 .build();
         log.debug("EmbeddingStore [ by ES ] client created.");
         return embeddingStore;
+    }
+
+    @Bean
+    ElasticsearchClient esClient() {
+        RestClientBuilder builder = RestClient.builder(new HttpHost(esHost, Integer.parseInt(esPort), "http"));
+        builder.setHttpClientConfigCallback(httpAsyncClientBuilder ->
+                httpAsyncClientBuilder.setSSLHostnameVerifier((host, sslSession) -> true));
+        RestClient restClient = builder.build();
+        RestClientTransport restClientTransport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+        return new ElasticsearchClient(restClientTransport);
+    }
+
+    @Bean
+    VectorStoreRepository vectorStoreRepository(final ElasticsearchClient esClient) {
+        return new VectorStoreRepository(esClient);
     }
 
 }

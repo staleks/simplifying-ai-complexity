@@ -78,6 +78,9 @@ dependencies {
 	implementation 'software.amazon.awssdk:sqs'
 	implementation 'software.amazon.awssdk:url-connection-client'
 
+	//~ Elasticsearch
+	implementation "co.elastic.clients:elasticsearch-java:${elasticsearchVersion}"
+
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
