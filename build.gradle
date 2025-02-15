@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot'			version "${springBootPluginVersion}"
-	id 'io.spring.dependency-management'	version "${springDependencyManagementPluginVersion}"
+	id 'org.springframework.boot'				version "${springBootPluginVersion}"
+	id 'io.spring.dependency-management'		version "${springDependencyManagementPluginVersion}"
 }
 
 group = 'com.jatheon.ergo.ai.assistant'
@@ -28,6 +28,8 @@ repositories {
 
 dependencyManagement {
 	imports {
+		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+		mavenBom "com.fasterxml.jackson:jackson-bom:${jacksonVersion}"
 		mavenBom "dev.langchain4j:langchain4j-bom:${langchain4jVersion}"
 	}
 }
@@ -42,6 +44,10 @@ dependencies {
 	implementation "io.undertow:undertow-servlet:${undertowVersion}"
 	implementation "io.undertow:undertow-core:${undertowVersion}"
 
+	implementation "ch.qos.logback:logback-access:${logbackVersion}"
+	implementation "ch.qos.logback:logback-core:${logbackVersion}"
+	implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
 	//~ lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -50,9 +56,9 @@ dependencies {
 	implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
 
 	//~ JSON
-	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+	implementation 'com.fasterxml.jackson.core:jackson-annotations'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
 	//~ dev.langchain4j
 	implementation 'dev.langchain4j:langchain4j'
