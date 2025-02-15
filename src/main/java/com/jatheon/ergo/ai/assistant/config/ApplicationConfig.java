@@ -5,6 +5,7 @@ import com.jatheon.ergo.ai.assistant.config.queue.SQSConfig;
 import com.jatheon.ergo.ai.assistant.config.scheduling.SchedulerConfig;
 import com.jatheon.ergo.ai.assistant.config.storage.S3ClientConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
+import com.jatheon.ergo.ai.assistant.endpoint.ContentController;
 import com.jatheon.ergo.ai.assistant.endpoint.DashboardController;
 import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
@@ -117,9 +118,15 @@ public class ApplicationConfig {
         return new EnrichedQuestionController(questionService);
     }
 
+    //~ pages
     @Bean
     DashboardController dashboardController() {
         return new DashboardController();
+    }
+
+    @Bean
+    ContentController contentController() {
+        return new ContentController();
     }
 
 }

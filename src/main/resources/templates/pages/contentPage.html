@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head/head :: dashboard-head}" id="dashboard-head">
+</head>
+
+<body class="">
+
+<!-- Left Sidenav -->
+<div th:replace="~{fragments/body/sidebar/dashboard_left_sidenav :: left-sidenav}" class="left-sidenav" id="left-sidenav">
+</div><!-- End of Left Sidenav -->
+
+<div class="page-wrapper">
+
+    <div th:replace="~{fragments/body/topbar/dashboard_topbar :: topbar}" id="topbar">
+    </div><!-- End of TopBar -->
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- Page Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="page-title">Analytics</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/}">Simplify AI Complexity</a></li>
+                                    <li class="breadcrumb-item active">Content</li>
+                                </ol>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end page-title-box-->
+                </div><!--end col-->
+            </div><!--end row-->
+            <!-- end page title end breadcrumb -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Content</h4>
+                            <p class="text-muted mb-0">
+                                Here I need to put some dummy text at the moment, but later, should put something for
+                                explanation.
+                            </p>
+                        </div><!--end card-header-->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2 class="card-title">Upload Document</h2>
+                                    <form method="post" th:action="@{/api/files/upload}" enctype="multipart/form-data">
+                                        <div class="input-group">
+                                            <input type="file" name="file" class="form-control" aria-label="Upload">
+                                            <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="~{fragments/body/footer/footer :: dashboard-footer}" id="dashboard-footer">
+        </footer><!--end footer-->
+    </div>
+</div>
+<div th:replace="~{fragments/thirdparty_scripts :: dashboard-thirdparty-scripts}"></div>
+</body>
+</html>
