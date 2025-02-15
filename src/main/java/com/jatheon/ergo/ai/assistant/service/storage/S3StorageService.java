@@ -54,6 +54,11 @@ public class S3StorageService implements StorageService {
         }
     }
 
+    /**
+     * TODO: we have to better organize this Exceptions
+     * @param location
+     * @return
+     */
     @Override
     public DocumentMetadata fetchMetadata(final String location) {
         log.debug("loading object metadata [location: {}]", location);

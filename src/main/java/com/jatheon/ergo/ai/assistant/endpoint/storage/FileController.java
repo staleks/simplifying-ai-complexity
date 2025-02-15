@@ -8,11 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,21 +20,6 @@ import java.util.List;
 public class FileController {
 
     private final StorageService storageService;
-
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Please select a file to upload");
-        }
-        try {
-            storageService.uploadFile(file, file.getOriginalFilename());
-            return ResponseEntity.ok("File uploaded successfully: " + file.getOriginalFilename());
-        } catch (final StorageException e) {
-            log.error("Failed to upload file: {}", file.getOriginalFilename());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upload file: " + file.getOriginalFilename());
-        }
-    }
 
     @GetMapping("/list")
     public ResponseEntity<List<StorageFile>> listFiles() {

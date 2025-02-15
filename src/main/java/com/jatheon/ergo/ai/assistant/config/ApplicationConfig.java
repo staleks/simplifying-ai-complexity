@@ -125,8 +125,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    ContentController contentController() {
-        return new ContentController();
+    ContentController contentController(final StorageService storageService) {
+        return new ContentController(storageService);
     }
 
 }
