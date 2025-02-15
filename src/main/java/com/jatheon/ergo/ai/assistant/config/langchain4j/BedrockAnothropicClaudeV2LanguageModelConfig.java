@@ -46,7 +46,7 @@ public class BedrockAnothropicClaudeV2LanguageModelConfig {
     public ChatLanguageModel bedrockAnthropicClaude2ChatLanguageModel() {
         return BedrockAnthropicMessageChatModel.builder()
                 .region(Region.of(regionName))
-                .model(BedrockAnthropicMessageChatModel.Types.AnthropicClaudeV2.getValue())
+                .model(BedrockAnthropicMessageChatModel.Types.AnthropicClaude3HaikuV1.getValue())
                 .temperature(temp)
                 .topP(topP)
                 .topK(topK)
