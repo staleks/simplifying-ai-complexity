@@ -3,6 +3,10 @@ spring:
     activate:
       on-profile: dev
 
+app:
+  name: Simplify AI Complexity
+  version: 1.0.0
+
 logging:
   config: classpath:logback-spring.xml
 
@@ -47,6 +51,6 @@ langchain4j:
 
 aws:
   bedrock:
-    accessKey: ${BEDROCK_AWS_ACCESS_KEY}
-    secretKey: ${BEDROCK_AWS_SECRET_KEY}
+    accessKey: ${AWS_BEDROCK_ACCESS_KEY}
+    secretKey: ${AWS_BEDROCK_SECRET_KEY}
     region: us-east-1
