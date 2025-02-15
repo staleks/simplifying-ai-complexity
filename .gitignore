@@ -8,3 +8,6 @@
 out
 build
 log
+
+.env
+
