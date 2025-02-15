@@ -1,7 +1,9 @@
 # simplifying-ai-complexity
 Source Code that supports "Simplify AI Complexity" presentation 
 
-## How to run?
+## Demo v1 - GenAI - Text generation, Q&A
+
+### How to run?
 
 All System Properties (e.g. OPENAI_API_KEY) are set in `.env` file. It will be loaded by `spring-dot-env` dependency.
 
@@ -14,7 +16,7 @@ $ ./gradlew bootRun -Dspring.profiles.active=dev
 
 ```
 
-## How to Demo?
+### How to Demo?
 
 1. Go to `Postman` there is Collection with name - `SimplifyAIComplexity` > `demo-1`
 2. As default Chat Model is set to: `GPT-3.5-turbo` post question:
