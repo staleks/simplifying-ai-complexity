@@ -19,6 +19,11 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
+app:
+  name: Simplify AI Complexity - Demo 3
+  version: 1.0.0
+
 logging:
   config: classpath:logback-spring.xml
 
@@ -64,14 +69,14 @@ langchain4j:
 ##### AWS S3 & SQS #####
 aws:
   s3:
-    accessKey: x
-    secretKey: x
+    accessKey: ${AWS_S3_ACCESS_KEY}
+    secretKey: ${AWS_S3_SECRET_KEY}
     region: us-east-1
     endpoint: https://s3.us-east-1.amazonaws.com
     bucketName: simplify-ai-complexity
   sqs:
-    accessKey: x
-    secretKey: x
+    accessKey: ${AWS_SQS_ACCESS_KEY}
+    secretKey: ${AWS_SQS_SECRET_KEY}
     region: us-east-1
     consumer:
       endpoint: https://sqs.us-east-1.amazonaws.com/592036762652/simplify_ai_complexity
@@ -89,8 +94,8 @@ processing:
 elasticsearch:
   host: localhost
   port: 9200
-  username: elastic
-  password: password
+  username: ${ELASTICSEARCH_USERNAME}
+  password: ${ELASTICSEARCH_PASSWORD}
 
 vectorstore:
   index:

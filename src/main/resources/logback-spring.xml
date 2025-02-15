@@ -1,18 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
 
+	<!-- Console Appender -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%d{dd-MM-yyyy;HH:mm:ss.SSS} [%thread] %-5level %logger{36}:%line - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<logger name="com.jatheon.ergo" level="DEBUG" />
-	<logger name="org.springframework" level="INFO" />
+	<!--Daily rolling file appender -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>log/simplify-ai-complexity/simplify-ai-complexity.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>log/simplify-ai-complexity/simplify-ai-complexity.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>7</maxHistory>
+			<totalSizeCap>40GB</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{dd-MM-yyyy;HH:mm:ss.SSS} [%thread] %-5level %logger{36}:%line - %msg%n</pattern>
+		</encoder>
+	</appender>
 
-	<root>
-		<level value="INFO" />
-		<appender-ref ref="STDOUT" />
-	</root>
-	
+	<springProfile name="dev">
+		<root>
+			<level value="INFO" />
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="FILE"/>
+		</root>
+
+		<logger name="com.jatheon.ergo" level="DEBUG" />
+		<logger name="org.springframework" level="INFO" />
+	</springProfile>
+
 </configuration>

@@ -30,15 +30,22 @@ dependencyManagement {
 	imports {
 		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
 		mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+		mavenBom "com.fasterxml.jackson:jackson-bom:${jacksonVersion}"
 		mavenBom "dev.langchain4j:langchain4j-bom:${langchain4jVersion}"
 		mavenBom "software.amazon.awssdk:bom:${awsSdkVersion}"
 	}
 }
 
 dependencies {
+	implementation "me.paulschwarz:spring-dotenv:${springDotEnvVersion}"
+
+	//~ logback
+	implementation "ch.qos.logback:logback-access:${logbackVersion}"
+	implementation "ch.qos.logback:logback-core:${logbackVersion}"
+	implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	//~ undertow servlet
@@ -55,10 +62,10 @@ dependencies {
 	implementation "commons-codec:commons-codec:${commonsCodecsVersion}"
 
 	//~ JSON
-	implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+	implementation 'com.fasterxml.jackson.core:jackson-core'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
 	implementation "com.google.code.gson:gson:${gsonVersion}"
 
@@ -90,6 +97,7 @@ tasks.named('test') {
 }
 
 bootRun {
+	systemProperties = System.properties
 	args = ["--spring.profiles.active=dev"]
 	jvmArgs = [
 			"-Duser.language=en",
