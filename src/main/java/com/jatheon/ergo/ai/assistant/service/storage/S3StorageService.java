@@ -2,6 +2,7 @@ package com.jatheon.ergo.ai.assistant.service.storage;
 
 import com.jatheon.ergo.ai.assistant.model.storage.DocumentMetadata;
 import com.jatheon.ergo.ai.assistant.model.storage.StorageFile;
+import com.jatheon.ergo.ai.assistant.service.error.StorageException;
 import com.jatheon.ergo.ai.assistant.service.storage.parser.DocumentParserFactory;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentParser;
@@ -23,6 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.jatheon.ergo.ai.assistant.service.error.StorageException.UNABLE_TO_READ_FOR_BUCKET;
+import static com.jatheon.ergo.ai.assistant.service.error.StorageException.UNABLE_TO_READ_FOR_BUCKET_AND_LOCATION;
+import static com.jatheon.ergo.ai.assistant.service.error.StorageException.UNABLE_TO_STORE_FILE;
 import static java.lang.String.format;
 
 @Slf4j
@@ -37,7 +41,7 @@ public class S3StorageService implements StorageService {
     private final AmazonS3DocumentLoader documentLoader;
 
     @Override
-    public void uploadFile(MultipartFile file, String fileName) throws IOException {
+    public void uploadFile(final MultipartFile file, final String fileName) throws StorageException {
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
@@ -45,8 +49,8 @@ public class S3StorageService implements StorageService {
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
             log.info("File uploaded successfully to S3: {}", fileName);
-        } catch (S3Exception e) {
-            throw new IOException("Error uploading file to S3", e);
+        } catch (S3Exception | IOException ex) {
+            throw new StorageException(format(UNABLE_TO_STORE_FILE, bucketName, fileName), ex);
         }
     }
 
@@ -59,9 +63,9 @@ public class S3StorageService implements StorageService {
                     .key(location)
                     .build();
             HeadObjectResponse headObjectResponse = s3Client.headObject(headObjectRequest);
-            return DocumentMetadata.of(headObjectResponse.contentLength(), headObjectResponse.contentType());
+            return DocumentMetadata.of(headObjectResponse.contentLength(), headObjectResponse.contentType(), headObjectResponse.eTag());
         } catch(final S3Exception s3Exception) {
-            if (s3Exception.statusCode() == 404) {
+            if (s3Exception.statusCode() == HttpStatus.NOT_FOUND.value()) {
                 throw new IllegalArgumentException("Content with specified key does not exist.", s3Exception);
             }
             throw new IllegalArgumentException(s3Exception);
@@ -75,21 +79,17 @@ public class S3StorageService implements StorageService {
     public Document load(final String location) {
         try {
             DocumentMetadata attachmentMetadata = fetchMetadata(location);
-            log.debug("AttachmentMetadata.contentType: {}", attachmentMetadata.getContentType());
-            log.debug("AttachmentMetadata.contentLength: {}", attachmentMetadata.getContentLength());
+            log.debug("AttachmentMetadata [contentType: {}, contentLength:{}, eTag: {}]", attachmentMetadata.getContentType(),
+                    attachmentMetadata.getContentLength(),
+                    attachmentMetadata.getETag());
             DocumentParser documentParser = documentParserFactory.create(attachmentMetadata.getContentType());
             Document document = documentLoader.loadDocument(bucketName, location, documentParser);
             document.metadata().put("contentLength", attachmentMetadata.getContentLength());
             document.metadata().put("contentType", attachmentMetadata.getContentType());
+            document.metadata().put("eTag", attachmentMetadata.getETag());
             return document;
         } catch(final S3Exception s3Exception) {
-            final String message = format("Unable to read message content from AWS storage [bucket: %s, key: %s]", bucketName, location);
-            if (s3Exception.statusCode() == HttpStatus.NOT_FOUND.value()) {
-                throw new IllegalStateException("Content with specified key does not exist.", s3Exception);
-            }
-            throw new IllegalArgumentException(s3Exception);
-        } catch (final Exception exception) {
-            throw new IllegalArgumentException("Unable to read message content from storage.", exception);
+            throw new StorageException(format(UNABLE_TO_READ_FOR_BUCKET_AND_LOCATION, bucketName, location), s3Exception);
         }
     }
 
@@ -99,13 +99,14 @@ public class S3StorageService implements StorageService {
         ListObjectsV2Request  listObjectsV2Request = ListObjectsV2Request.builder()
                 .bucket(bucketName)
                 .build();
-        s3Client.listObjectsV2(listObjectsV2Request).contents().forEach(s3Object -> {
-            result.add(StorageFile.of(bucketName, s3Object.key(), s3Object.lastModified(), s3Object.size(), s3Object.eTag()));
-        });
-        return result;
+        try {
+            s3Client.listObjectsV2(listObjectsV2Request).contents().forEach(s3Object -> {
+                result.add(StorageFile.of(bucketName, s3Object.key(), s3Object.lastModified(), s3Object.size(), s3Object.eTag()));
+            });
+            return result;
+        } catch (final S3Exception s3Exception) {
+            throw new StorageException(format(UNABLE_TO_READ_FOR_BUCKET, bucketName), s3Exception);
+        }
     }
-
-
-
 
 }

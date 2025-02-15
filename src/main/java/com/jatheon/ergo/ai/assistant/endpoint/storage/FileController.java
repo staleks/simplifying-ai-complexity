@@ -1,6 +1,7 @@
 package com.jatheon.ergo.ai.assistant.endpoint.storage;
 
 import com.jatheon.ergo.ai.assistant.model.storage.StorageFile;
+import com.jatheon.ergo.ai.assistant.service.error.StorageException;
 import com.jatheon.ergo.ai.assistant.service.storage.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -32,7 +32,7 @@ public class FileController {
         try {
             storageService.uploadFile(file, file.getOriginalFilename());
             return ResponseEntity.ok("File uploaded successfully: " + file.getOriginalFilename());
-        } catch (IOException e) {
+        } catch (final StorageException e) {
             log.error("Failed to upload file: {}", file.getOriginalFilename());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to upload file: " + file.getOriginalFilename());
@@ -41,7 +41,12 @@ public class FileController {
 
     @GetMapping("/list")
     public ResponseEntity<List<StorageFile>> listFiles() {
-        return ResponseEntity.ok(storageService.fetchAll());
+        try {
+            return ResponseEntity.ok(storageService.fetchAll());
+        } catch (final StorageException storageException) {
+            log.error("Failed to fetch files from bucket!", storageException);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }

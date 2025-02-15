@@ -2,6 +2,7 @@ package com.jatheon.ergo.ai.assistant.service.storage;
 
 import com.jatheon.ergo.ai.assistant.model.storage.DocumentMetadata;
 import com.jatheon.ergo.ai.assistant.model.storage.StorageFile;
+import com.jatheon.ergo.ai.assistant.service.error.StorageException;
 import dev.langchain4j.data.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface StorageService {
 
-    void uploadFile(final MultipartFile file, final String fileName) throws IOException;
+    void uploadFile(final MultipartFile file, final String fileName) throws StorageException;
 
     DocumentMetadata fetchMetadata(final String location);
 
