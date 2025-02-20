@@ -29,6 +29,7 @@ import java.util.List;
 import static com.jatheon.ergo.ai.assistant.service.error.StorageException.UNABLE_TO_READ_FOR_BUCKET;
 import static com.jatheon.ergo.ai.assistant.service.error.StorageException.UNABLE_TO_READ_FOR_BUCKET_AND_LOCATION;
 import static com.jatheon.ergo.ai.assistant.service.error.StorageException.UNABLE_TO_STORE_FILE;
+import static com.jatheon.ergo.ai.assistant.service.util.ClearDataUtil.clearData;
 import static java.lang.String.format;
 
 @Slf4j
@@ -93,7 +94,7 @@ public class S3StorageService implements StorageService {
             Document document = documentLoader.loadDocument(bucketName, location, documentParser);
             document.metadata().put("contentLength", attachmentMetadata.getContentLength());
             document.metadata().put("contentType", attachmentMetadata.getContentType());
-            document.metadata().put("eTag", attachmentMetadata.getETag());
+            document.metadata().put("eTag", clearData(attachmentMetadata.getETag()));
             return document;
         } catch(final S3Exception s3Exception) {
             throw new StorageException(format(UNABLE_TO_READ_FOR_BUCKET_AND_LOCATION, bucketName, location), s3Exception);

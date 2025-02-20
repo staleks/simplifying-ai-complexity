@@ -1,22 +1,29 @@
 package com.jatheon.ergo.ai.assistant.config;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.jatheon.ergo.ai.assistant.config.langchain4j.Langchain4JConfig;
 import com.jatheon.ergo.ai.assistant.config.queue.SQSConfig;
 import com.jatheon.ergo.ai.assistant.config.scheduling.SchedulerConfig;
 import com.jatheon.ergo.ai.assistant.config.storage.S3ClientConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
+import com.jatheon.ergo.ai.assistant.endpoint.SummarizationController;
 import com.jatheon.ergo.ai.assistant.endpoint.storage.ContentController;
 import com.jatheon.ergo.ai.assistant.endpoint.DashboardController;
 import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.storage.FileDataController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
+import com.jatheon.ergo.ai.assistant.repository.EmbeddingStoreRepository;
+import com.jatheon.ergo.ai.assistant.repository.EmbeddingStoreRepositoryImpl;
 import com.jatheon.ergo.ai.assistant.repository.VectorStoreRepository;
 import com.jatheon.ergo.ai.assistant.service.EnrichedOpenAIQuestionService;
 import com.jatheon.ergo.ai.assistant.service.EnrichedQuestionService;
 import com.jatheon.ergo.ai.assistant.service.IngestionOrchestrator;
 import com.jatheon.ergo.ai.assistant.service.SimpleOpenAIQuestionService;
 import com.jatheon.ergo.ai.assistant.service.SimpleQuestionService;
+import com.jatheon.ergo.ai.assistant.service.SummarizationService;
+import com.jatheon.ergo.ai.assistant.service.SummarizationServiceImpl;
+import com.jatheon.ergo.ai.assistant.service.prompt.PromptFactory;
 import com.jatheon.ergo.ai.assistant.service.storage.S3StorageService;
 import com.jatheon.ergo.ai.assistant.service.storage.StorageService;
 import com.jatheon.ergo.ai.assistant.service.storage.parser.CustomDocumentParserFactory;
@@ -117,6 +124,24 @@ public class ApplicationConfig {
     EnrichedQuestionController advancedQuestionController(final EnrichedQuestionService questionService) {
         return new EnrichedQuestionController(questionService);
     }
+
+    @Bean
+    EmbeddingStoreRepository embeddingStoreRepository(final ElasticsearchClient elasticsearchClient) {
+        return new EmbeddingStoreRepositoryImpl(elasticsearchClient);
+    }
+
+    //~ summarization
+    @Bean
+    SummarizationService summarizationService(final EmbeddingStoreRepository embeddingStoreRepository,
+                                              final ChatLanguageModel chatLanguageModel) {
+        return new SummarizationServiceImpl(embeddingStoreRepository, chatLanguageModel);
+    }
+
+    @Bean
+    SummarizationController summarizationController(final SummarizationService summarizationService) {
+        return new SummarizationController(summarizationService);
+    }
+
 
     //~ pages
     @Bean

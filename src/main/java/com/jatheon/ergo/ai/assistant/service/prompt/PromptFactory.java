@@ -4,13 +4,16 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.joining;
 
+@Slf4j
 public final class PromptFactory {
 
     private PromptFactory() {
@@ -40,6 +43,30 @@ public final class PromptFactory {
         variables.put("question", question);
         variables.put("context", context);
         return promptTemplate.apply(variables);
+    }
+
+    public static Prompt summarizePrompt(final List<String> textSegments) {
+        if (textSegments == null || textSegments.isEmpty()) {
+            return null;
+        }
+        String SUMMARIZATION_PROMPT_TEMPLATE = "As a professional summarizer, create a concise and comprehensive summary" +
+                " of the provided text, be it an article, post, conversation, or passage, while adhering to these guidelines: \n\n" +
+                "1. Craft a summary that is detailed, thorough, in-depth, and complex, while maintaining clarity and conciseness.\n" +
+                "2. Incorporate main ideas and essential information, eliminating extraneous language and focusing on critical aspects.\n" +
+                "3. Rely strictly on the provided text, without including external information.\n" +
+                "4. Format the summary in paragraph form for easy understanding.\n" +
+                "5. Ensure the summary is free from any personal opinions or biases, as the objective is to provide a comprehensive and accurate summary.\n" +
+                "\n\nText: {{text}}";
+        PromptTemplate promptTemplate = PromptTemplate.from(SUMMARIZATION_PROMPT_TEMPLATE);
+        StringBuilder sb = new StringBuilder();
+        for (String content : textSegments) {
+            sb.append(content).append("\n");
+        }
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("text", sb.toString());
+        Prompt prompt = promptTemplate.apply(variables);
+        log.trace("Summarization prompt: {}", prompt.text());
+        return prompt;
     }
 
 }
