@@ -4,6 +4,8 @@ import com.jatheon.ergo.ai.assistant.model.storage.DocumentMetadata;
 import com.jatheon.ergo.ai.assistant.model.storage.StorageFile;
 import com.jatheon.ergo.ai.assistant.service.error.StorageException;
 import com.jatheon.ergo.ai.assistant.service.storage.parser.DocumentParserFactory;
+import com.jatheon.ergo.ai.assistant.service.util.PagingRequest;
+import com.jatheon.ergo.ai.assistant.service.util.PagingResponse;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.data.document.loader.amazon.s3.AmazonS3DocumentLoader;
@@ -99,16 +101,16 @@ public class S3StorageService implements StorageService {
     }
 
     @Override
-    public List<StorageFile> fetchAll() {
-        List<StorageFile> result = new ArrayList<>();
+    public PagingResponse<StorageFile> fetchAll(final PagingRequest pagingRequest) {
+        List<StorageFile> storageFileList = new ArrayList<>();
         ListObjectsV2Request  listObjectsV2Request = ListObjectsV2Request.builder()
                 .bucket(bucketName)
                 .build();
         try {
             s3Client.listObjectsV2(listObjectsV2Request).contents().forEach(s3Object -> {
-                result.add(StorageFile.of(bucketName, s3Object.key(), s3Object.lastModified(), s3Object.size(), s3Object.eTag()));
+                storageFileList.add(StorageFile.of(bucketName, s3Object.key(), s3Object.lastModified(), s3Object.size(), s3Object.eTag()));
             });
-            return result;
+            return new PagingResponse<>(storageFileList, storageFileList.size(), pagingRequest.getPage(), pagingRequest.getSize(), storageFileList.size());
         } catch (final S3Exception s3Exception) {
             throw new StorageException(format(UNABLE_TO_READ_FOR_BUCKET, bucketName), s3Exception);
         }

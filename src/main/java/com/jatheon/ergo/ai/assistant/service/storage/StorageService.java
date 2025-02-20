@@ -3,6 +3,8 @@ package com.jatheon.ergo.ai.assistant.service.storage;
 import com.jatheon.ergo.ai.assistant.model.storage.DocumentMetadata;
 import com.jatheon.ergo.ai.assistant.model.storage.StorageFile;
 import com.jatheon.ergo.ai.assistant.service.error.StorageException;
+import com.jatheon.ergo.ai.assistant.service.util.PagingRequest;
+import com.jatheon.ergo.ai.assistant.service.util.PagingResponse;
 import dev.langchain4j.data.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,6 @@ public interface StorageService {
 
     Document load(final String location);
 
-    List<StorageFile> fetchAll();
+    PagingResponse<StorageFile> fetchAll(final PagingRequest pagingRequest);
 
 }

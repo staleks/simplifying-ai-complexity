@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head/head :: dashboard-head}" id="dashboard-head">
+<head th:replace="~{fragments/head/head :: head-with-datatables}" id="head-with-datatables">
 </head>
 
 <body class="">
 
 <!-- Left Sidenav -->
-<div th:replace="~{fragments/body/sidebar/dashboard_left_sidenav :: left-sidenav}" class="left-sidenav" id="left-sidenav">
+<div th:replace="~{fragments/body/sidebar/dashboard_left_sidenav :: left-sidenav}" class="left-sidenav"
+     id="left-sidenav">
 </div><!-- End of Left Sidenav -->
 
 <div class="page-wrapper">
@@ -60,11 +61,56 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <table id="filesDataTable"
+                           class="table table-striped table-bordered dt-responsive nowrap"
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ETag</th>
+                            <th>Size</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
         <footer th:replace="~{fragments/body/footer/footer :: dashboard-footer}" id="dashboard-footer">
         </footer><!--end footer-->
     </div>
 </div>
-<div th:replace="~{fragments/thirdparty_scripts :: dashboard-thirdparty-scripts}"></div>
+<div th:replace="~{fragments/thirdparty_scripts :: datatables-thirdparty-scripts}"></div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+        $(document).ready(function() {
+            var filesDataTable = $("#filesDataTable").DataTable({
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/datatables/storage/v1/files",
+                "columns": [
+                    { data: 'name', searchable: true, orderable: true },
+                    { data: 'etag', searchable: false, orderable: false },
+                    { data: 'humanReadableSize', searchable: false, orderable: false},
+                    { searchable: false, orderable: false }
+                ],
+                "aoColumnDefs":[
+                    {
+                            "aTargets":[3],
+                            "className": "text-right",
+                            "mData": null,
+                            "mRender": function (data, type, row) {
+                                return '';
+                            }
+                    }
+                ],
+            });
+        });
+    /*]]>*/
+</script>
+
 </body>
 </html>

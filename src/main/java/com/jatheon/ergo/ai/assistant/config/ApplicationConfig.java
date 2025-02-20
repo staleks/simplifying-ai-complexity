@@ -5,11 +5,11 @@ import com.jatheon.ergo.ai.assistant.config.queue.SQSConfig;
 import com.jatheon.ergo.ai.assistant.config.scheduling.SchedulerConfig;
 import com.jatheon.ergo.ai.assistant.config.storage.S3ClientConfig;
 import com.jatheon.ergo.ai.assistant.config.web.RestWebMvcConfig;
-import com.jatheon.ergo.ai.assistant.endpoint.ContentController;
+import com.jatheon.ergo.ai.assistant.endpoint.storage.ContentController;
 import com.jatheon.ergo.ai.assistant.endpoint.DashboardController;
 import com.jatheon.ergo.ai.assistant.endpoint.EnrichedQuestionController;
 import com.jatheon.ergo.ai.assistant.endpoint.QuestionController;
-import com.jatheon.ergo.ai.assistant.endpoint.storage.FileController;
+import com.jatheon.ergo.ai.assistant.endpoint.storage.FileDataController;
 import com.jatheon.ergo.ai.assistant.endpoint.ping.PingController;
 import com.jatheon.ergo.ai.assistant.repository.VectorStoreRepository;
 import com.jatheon.ergo.ai.assistant.service.EnrichedOpenAIQuestionService;
@@ -60,8 +60,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    FileController fileUploadController(final StorageService uploadStorageService) {
-        return new FileController(uploadStorageService);
+    FileDataController fileUploadController(final StorageService uploadStorageService) {
+        return new FileDataController(uploadStorageService);
     }
 
     //~ Handle S3 event

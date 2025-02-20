@@ -17,5 +17,22 @@
     <script th:src="@{/js/app.js}"></script>
 </div>
 
+<div th:fragment="datatables-thirdparty-scripts">
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/metisMenu.min.js}"></script>
+
+    <!-- Data Tables - required -->
+    <script th:src="@{/js/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/datatables/dataTables.bootstrap5.min.js}"></script>
+    <script th:src="@{/js/datatables/jquery.spring-friendly.min.js}"></script>
+
+    <!-- Application JS File(s) -->
+    <script th:src="@{/js/waves.js}"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+</div>
+
 </body>
 </html>
