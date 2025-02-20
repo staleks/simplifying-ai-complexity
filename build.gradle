@@ -39,7 +39,7 @@ dependencyManagement {
 dependencies {
 	implementation "me.paulschwarz:spring-dotenv:${springDotEnvVersion}"
 
-	//~ logback
+	//~ Logback
 	implementation "ch.qos.logback:logback-access:${logbackVersion}"
 	implementation "ch.qos.logback:logback-core:${logbackVersion}"
 	implementation "ch.qos.logback:logback-classic:${logbackVersion}"
@@ -47,13 +47,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.data:spring-data-commons'
 
-	//~ undertow servlet
+	//~ Thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	//~ Undertow servlet
 	implementation 'org.springframework.boot:spring-boot-starter-undertow'
 	implementation "io.undertow:undertow-servlet:${undertowVersion}"
 	implementation "io.undertow:undertow-core:${undertowVersion}"
 
-	//~ lombok
+	//~ Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -87,6 +92,14 @@ dependencies {
 
 	//~ Elasticsearch
 	implementation "co.elastic.clients:elasticsearch-java:${elasticsearchVersion}"
+
+	//~ WebJARs Locator
+	implementation "org.webjars:webjars-locator-core:${webjarsLocatorVersion}"
+
+	//~ WebJars : Bootstrap v5.x, jQuery 3.7.x
+	implementation "org.webjars:bootstrap:${webjarsBootstrapVersion}"
+	implementation "org.webjars:jquery:${webjarsJQueryVersion}"
+	implementation "org.webjars.npm:bootstrap-icons:${webjarsBootstrapIconsVersion}"
 
 	//~ testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

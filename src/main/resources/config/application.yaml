@@ -20,6 +20,14 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
 app:
   name: Simplify AI Complexity - Demo 3
   version: 1.0.0

@@ -1,11 +1,13 @@
 package com.jatheon.ergo.ai.assistant.model.storage;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.time.Instant;
 
+@Slf4j
 public class StorageFile {
     private final String bucketName;
     private final String name;
@@ -42,7 +44,16 @@ public class StorageFile {
     }
 
     public String getEtag() {
-        return etag;
+        String result = etag;
+        if (etag.startsWith("\"")) {
+            result = etag.substring(1, etag.length() - 1);
+        }
+        log.info("result>1: {}", result);
+        if (result.endsWith("\"")) {
+            result = result.substring(0, etag.length() - 1);
+        }
+        log.info("result>2: {}", result);
+        return result;
     }
 
     public String getHumanReadableSize() {

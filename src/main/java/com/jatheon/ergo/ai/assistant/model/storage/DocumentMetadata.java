@@ -6,4 +6,5 @@ import lombok.Value;
 public class DocumentMetadata {
     Long contentLength;
     String contentType;
+    String eTag;
 }

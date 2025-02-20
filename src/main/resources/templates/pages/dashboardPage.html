@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head/head :: dashboard-head}" id="dashboard-head">
+</head>
+
+<body class="">
+
+<!-- Left Sidenav -->
+<div th:replace="~{fragments/body/sidebar/dashboard_left_sidenav :: left-sidenav}" class="left-sidenav" id="left-sidenav">
+</div><!-- End of Left Sidenav -->
+
+<div class="page-wrapper">
+
+    <div th:replace="~{fragments/body/topbar/dashboard_topbar :: topbar}" id="topbar">
+    </div><!-- End of TopBar -->
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- Page Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="page-title">Analytics</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/}">Simplify AI Complexity</a></li>
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end page-title-box-->
+                </div><!--end col-->
+            </div><!--end row-->
+            <!-- end page title end breadcrumb -->
+        </div>
+        <footer th:replace="~{fragments/body/footer/footer :: dashboard-footer}" id="dashboard-footer">
+        </footer><!--end footer-->
+    </div>
+</div>
+<div th:replace="~{fragments/thirdparty_scripts :: dashboard-thirdparty-scripts}"></div>
+</body>
+</html>
