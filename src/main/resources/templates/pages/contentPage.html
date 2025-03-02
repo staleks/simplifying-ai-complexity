@@ -40,10 +40,15 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Content</h4>
-                            <p class="text-muted mb-0">
-                                Here I need to put some dummy text at the moment, but later, should put something for
-                                explanation.
-                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-muted mb-0">
+                                    Here I need to put some dummy text at the moment, but later, should put something for
+                                    explanation.
+                                </div>
+                                <div id="loadingSpinner" class="spinner-border text-primary ms-auto">
+                                    <span class="sr-only">Loading ...</span>
+                                </div>
+                            </div>
                         </div><!--end card-header-->
                         <div class="card-body">
                             <div class="row">
@@ -83,9 +88,35 @@
     </div>
 </div>
 <div th:replace="~{fragments/thirdparty_scripts :: datatables-thirdparty-scripts}"></div>
+
+<div class="modal fade bd-example-modal-xl" id="summarizeModal" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title m-0" id="myExtraLargeModalLabel">Summarization</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div><!--end modal-header-->
+            <div class="modal-body">
+                <h5 class="mt-0">Following text has beed provided as summarization on the given document</h5>
+                <p id="summarizeResult">Cras mattis consectetur purus sit amet fermentum.
+                    Cras justo odio, dapibus ac facilisis in,
+                    egestas eget quam. Morbi leo risus, porta ac
+                    consectetur ac, vestibulum at eros.</p>
+            </div><!--end modal-body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div><!--end modal-footer-->
+        </div><!--end modal-content-->
+    </div><!--end modal-dialog-->
+</div><!--end modal-->
+
+
+
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
         $(document).ready(function() {
+            $("#loadingSpinner").hide();
+
             var filesDataTable = $("#filesDataTable").DataTable({
                 "responsive": true,
                 "processing": true,
@@ -103,10 +134,36 @@
                             "className": "text-right",
                             "mData": null,
                             "mRender": function (data, type, row) {
-                                return '';
+                                return '<a href="#" class="summarizeDocument" data-etag="' + data.etag + '"><i class="ti-wand text-secondary fs-18"></i></a>';
                             }
                     }
                 ],
+                "fnDrawCallback": function() {
+                    $(".summarizeDocument").click(function(e) {
+                        $("#loadingSpinner").show();
+                        e.preventDefault();
+                        var $el = $(this);
+                        var formData = { "etag": $el.data('etag') };
+				        $.ajax({
+				            type: 'POST',
+				            url: 'ai/get-summary',
+				            data: JSON.stringify(formData),
+				            contentType: 'application/json; charset=utf-8',
+				            dataType: "json",
+				            success: function (data) {
+				                $("#loadingSpinner").hide();
+				                $("#summarizeResult").text(data.summary);
+				                $('#summarizeModal').modal('show');
+				            },
+				            error: function(data, textStatus, jqXHR) {
+				                console.log('Error!');
+				                console.log('error-data: ', data);
+				                $("#loadingSpinner").hide();
+				            }
+				        });
+
+                    });
+                }
             });
         });
     /*]]>*/

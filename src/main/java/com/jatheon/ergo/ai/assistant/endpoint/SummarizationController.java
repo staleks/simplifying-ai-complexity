@@ -1,6 +1,7 @@
 package com.jatheon.ergo.ai.assistant.endpoint;
 
 import com.jatheon.ergo.ai.assistant.model.SummarizationRequest;
+import com.jatheon.ergo.ai.assistant.model.SummarizationResponse;
 import com.jatheon.ergo.ai.assistant.service.SummarizationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class SummarizationController {
     @PostMapping(value = SUMMARIZATION_ENDPOINT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> question(@Valid @RequestBody SummarizationRequest request) {
+    public ResponseEntity<SummarizationResponse> question(@Valid @RequestBody SummarizationRequest request) {
         try{
-            return ResponseEntity.ok(summarizationService.summarize(request.getETag()));
+            return ResponseEntity.ok(SummarizationResponse.of(summarizationService.summarize(request.getETag())));
         } catch (Exception ex){
             return ResponseEntity.internalServerError().build();
         }
